@@ -1,10 +1,12 @@
 <template>
   <div class="max-w-lg mx-auto py-20">
     <div class="flex items-center gap-2">
-      <div :class="`bg-[url('public/cat.png')] bg-no-repeat bg-center bg-contain border-2 border-solid border-${getColor()} rounded-full w-14 h-14`"></div>
+      <div
+      :class="`bg-no-repeat bg-center bg-contain border-2 border-solid border-${getColor()} rounded-full w-14 h-14`"
+      :style="{ backgroundImage: 'url(' + student.image + ')' }"
+      ></div>
       <div>
-        <label :class="`text-${getColor()}`" for="hours-old">{{ student.name }} is</label>
-
+        <div :class="`text-${getColor()}`" for="hours-old">{{ student.name }} is</div>
         <div class="flex gap-2">
           <div class="flex gap-2">
             <Input :id="student.name" class="border-2 rounded-md border-solid border-purple" @blur="handleFocus(false)" @focus="handleFocus(true)" required v-model="student.age"></Input>
@@ -24,9 +26,11 @@ import Input from "./components/Input.vue";
 const student = reactive<{
   name: string,
   age: number | string | undefined;
+  image: any;
 }>({
-  name: 'Hugh',
-  age: undefined
+  name: 'Hugh', 
+  age: undefined,
+  image: 'cat.png'
 })
 
 let isInputFocused = ref(false)

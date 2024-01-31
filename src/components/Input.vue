@@ -12,7 +12,7 @@ const props = withDefaults(
   }
 );
 
-let width: Ref<number> = ref(72)
+let size: Ref<number> = ref(4)
 
 const emit = defineEmits<{
     (event: 'update:modelValue', payload: number): void;
@@ -20,18 +20,17 @@ const emit = defineEmits<{
 
 watch(() => props.modelValue, (newVal) => {
   if(newVal && isWordTooLong(newVal.toString())) {
-    width.value = width.value + 8
+    size.value = newVal.toString().length;
   } 
 });
 
 const reformatInput = (value:any) => {
   value = value.toString().replace(/\D+/g, '')
   return value;
-
 };
 
 const isWordTooLong = (value: string) => {
-  return value.length > 4
+  return value.length >= size.value;
 };
 
 </script>
@@ -40,11 +39,10 @@ const isWordTooLong = (value: string) => {
     <input
       type="text"
       :id="modelValue?.toString()"
-      v-bind="$attrs"
+      :size="size"
       :value="modelValue ? Intl.NumberFormat('fr-FR').format(reformatInput(modelValue)) : null"
       :required="required"
-      class="p-1"
+      class="p-1 w-[72]"
       @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-      :style="{ width: `${width}px` }"
     /> 
 </template>
