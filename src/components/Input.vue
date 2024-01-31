@@ -1,5 +1,5 @@
 <script setup lang="ts">  
-import { ref, defineProps, watch, type Ref } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 
 const props = withDefaults(
   defineProps<{
@@ -8,7 +8,7 @@ const props = withDefaults(
   }>(),
   {
     required: true,
-    modelValue: undefined
+    modelValue: null
   }
 );
 
@@ -21,25 +21,30 @@ const emit = defineEmits<{
 watch(() => props.modelValue, (newVal) => {
   if(newVal && isWordTooLong(newVal.toString())) {
     width.value = width.value + 8
-  }
+  } 
 });
+
+const reformatInput = (value:any) => {
+  value = value.toString().replace(/\D+/g, '')
+  return value;
+
+};
 
 const isWordTooLong = (value: string) => {
   return value.length > 4
 };
 
-
 </script>
 
 <template>
     <input
-      type="number"
+      type="text"
       :id="modelValue?.toString()"
       v-bind="$attrs"
-      :value="modelValue"
+      :value="modelValue ? Intl.NumberFormat('fr-FR').format(reformatInput(modelValue)) : null"
       :required="required"
       class="p-1"
       @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       :style="{ width: `${width}px` }"
-    > 
+    /> 
 </template>
